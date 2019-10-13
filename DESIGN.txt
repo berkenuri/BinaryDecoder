@@ -1,0 +1,19 @@
+Berke Nuri
+
+Overview:
+This program reads in a .mach file as a command line argument which is a 32 bit binary encodings of MIPS instructions. It should print out the lines' MIPS assembly representations. 
+
+This program consists of four classes: OpcodeTable, RegisterTable, Instructions, MachLangParser and one driver file called DisASM.cpp
+
+Description of Classes/Files:
+OpcodeTable: This class stores information about the format and field informations(function and opcode) of the instructions. It only contains information of the MIPS instructions that exist in the enum class in the OpcodeTable header file. It provides specific info about the order of the registers too. 
+RegisterTable: This class stores information about the 32 valid register names. The names are constructed corresponding to their register numbers.
+Instruction: This class stores information about the instructions' field values. It also includes methods that construct or change values of the instructions. Registers, the opcode, immediate fields, binary encodings and the decodings are stored here. 
+MachLangParser: This class is used to access the public fields and method of the classes above to be able to decode the binary encodings. It reads the file and checks if it is 32 bits long and accepts the MIPS instructions which are identified in the OpcodeTable. It has a list(vector) of instructions that got translated from the lines of the input file. This file decodes the binary encodings into an instruction, then assembles the bitfields into the proper format of the instruction corresponding to the types of the instruction.  
+DisASM: This driver file is the executable which links all of these classes and get run.
+
+Organization:
+The DisASM class passes the name of the input file supplied by the command line arguments to the MachLangParser class. MachLangParser class checks if it is 32 bit long in each line and sythatically correct. It checks the lines by decoding the opcodes and function fields to make sure the instructions are identified in the OpcodeTable. If it is correct, it will have a list of instruction instances for each line. The fields of these instruction instances are calculated by decoding the binary encodings into integers and checking for their corresponding valid register names from the RegisterTable and their corresponding opcode names and immediate field or shift amount values from the OpcodeTable. Once it gets decoded, it needs to get assembled in a proper way as the MIPS instructions are formatted. The inner class iterator iterates through each instruction and their decodings and assembles them into proper MIPS instructions. 
+
+Adding a New Method:
+To be able to add a R-Type Instruction, adding the name to the enum in the OpcodeTable header file and adding the instruction's corresponding field position and field values into the OpcodeTable.cpp is enough. However, my code is not efficient towards I types, I hard coded the assembly method of the I typed memory and control instructions such to be able to get their unique format.   
